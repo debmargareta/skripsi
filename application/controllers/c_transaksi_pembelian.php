@@ -55,8 +55,15 @@ class c_transaksi_pembelian extends CI_Controller {
 	}
 
 	function tampil_transaksi(){
+
 		$data['pembelian']=$this->m_transaksi_pembelian->tampil_transaksi()->result();
-		$this->load->view('v_transaksi',$data);
+		$data['detail']=$this->m_transaksi_pembelian->tampil_detail_transaksi_pembelian()->result();
+		$this->load->view('v_transaksi_pembelian',$data);
+	}
+	function modal($id_transaksi_pembelian){
+		$where = array('detail_transaksi_pembelian.id_transaksi_pembelian'=>$id_transaksi_pembelian);
+		$data['detail'] = $this->m_transaksi_pembelian->tampil_detail_transaksi_pembelian($where)->result();
+		$this->load->view('modal_transaksi_pembelian',$data);
 	}
 	
 }

@@ -1,20 +1,20 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class c_kasbon extends CI_Controller {
+class c_resep extends CI_Controller {
   function __construct(){
     parent::__construct();
     $this->load->model('m_resep');
   }
 
-  public function tampil_kasbon(){
+  public function tampil_resep(){
     $data['kasbon'] = $this->m_kasbon->tampil_resep()->result();
-    $this->load->view('v_resep', $data); // Load view v_kasbon.php
+    $this->load->view('v_resep', $data);
   }
 
-  public function tampil_tambah_kasbon(){
-    $data['pilihkaryawan']=$this->m_kasbon->pilihkaryawan()->result();
+  public function tampil_tambah_resep(){
+    $data['pilihkue']=$this->m_resep->pilihkue()->result();
     $data['pilihbahan']=$this->m_resep->pilihbahan()->result();
-    $this->load->view('v_tambah_kasbon.php',$data);
+    $this->load->view('v_tambah_resep.php',$data);
   }
 
   public function save(){

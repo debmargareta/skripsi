@@ -1,19 +1,6 @@
 <?php
 
-class m_resepkue extends CI_Model{
-    public function save_batch($data){
-        $result = array();
-        for($x = 0; $x<count($data); $x++){
-            $result[] = array(
-                'id_kasbon'=>"",
-                'id_karyawan'=>$_POST['idKaryawan'][$x],
-                'jumlah_kasbon'=>$_POST['jumlahKasbon'][$x],
-                'tanggal_kasbon'=>$_POST['tanggalKasbon'][$x],
-                'status'=>1,
-            );
-        }
-        $this->db->insert_batch('kasbon', $result);
-    }
+class m_resep extends CI_Model{
     function pilihkue(){
         return $this->db->get('kue');
     }
@@ -21,7 +8,11 @@ class m_resepkue extends CI_Model{
         return $this->db->get('bahan');
     }
     function tampil_resep(){
-        $this->db->select('resep')->from('kasbon')->join('karyawan','karyawan.id_karyawan = kasbon.id_karyawan','inner')->where('kasbon.status = 1');
+        $this->db->select('resep')
+        ->from('kasbon')
+        ->join('karyawan','karyawan.id_karyawan = kasbon.id_karyawan','inner')
+        ->where('kasbon.status = 1');
+        
         return $this->db->get();
     }
     
