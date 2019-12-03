@@ -8,31 +8,30 @@ class c_pembayaran_hutang extends CI_Controller {
         $this->load->model('m_pembayaran_hutang');
     }
     
-    function lihat_tambah_supplier(){
-        $this->load->view('v_tambah_supplier.php'); 
+    function lihat_tambah_pembayaran(){
+        $data['hutang']= $this->m_pembayaran_hutang->hutang()->result();
+        $this->load->view('v_tambah_pembayaran_hutang.php',$data); 
     }
     
-    function tambah_supplier(){
-        $nama = $this->input->post('namaSupplier');
-        $nama_toko = $this->input->post('namaToko');
-        $alamat = $this->input->post('alamatToko');
-        $telp = $this->input->post('noToko');
+    function tambah_pembayaran(){
+        $id = $this->input->post('id_transaksi_pembelian');
+        $nominal = $this->input->post('nominal');
+        $tgl = date('Y-m-d');
         
         $data = array(
-            'nama_supplier' => $nama,
-            'nama_toko' => $nama_toko,
-            'alamat_supplier' => $alamat,
-            'no_telp_supplier' => $telp,
+            'id_transaksi_pembelian' => $id,
+            'nominal_bayar' => $nominal,
+            'tanggal_pembayaran' => $tgl,
             'status' => 1,
         );
         
-        $this->m_supplier->tambah_supplier($data,'supplier');
-        redirect('c_supplier/tampil_supplier');
+        $this->m_pembayaran_hutang->tambah_pembayaran($data,'pembayaran_hutang');
+        redirect('c_pembayaran_hutang/tampil_pembayaran');
     }
     
-    function tampil_supplier(){
-        $data['tampil'] = $this->m_supplier->tampil_supplier()->result();
-        $this->load->view('v_supplier.php',$data);
+    function tampil_pembayaran(){
+        $data['tampil'] = $this->m_pembayaran_hutang->tampil_pembayaran()->result();
+        $this->load->view('v_pembayaran_hutang.php',$data);
     }
     
     function edit_supplier($idsupplier){
@@ -70,5 +69,12 @@ class c_pembayaran_hutang extends CI_Controller {
         $this->m_supplier->ubah_status_supplier($where,$data,'supplier');
         redirect('c_supplier/tampil_supplier');
     }
+    function get_id_transaksi(){
+         $id = $this->input->post('id_transaksi_pembelian');
+         $data = $this->m_pembayaran_hutang->get_id_transaksi($id)->result();
+         $data2 = $this->m_pembayaran_hutang->totalharga($id)->result();
+         $hasil = array_merge($data, $data2);
+         echo json_encode($hasil);
+     }
 }
 ?>

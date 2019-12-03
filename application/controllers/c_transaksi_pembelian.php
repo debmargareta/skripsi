@@ -29,10 +29,6 @@ class c_transaksi_pembelian extends CI_Controller {
         
         $id = $this->m_transaksi_pembelian->tambah_transaksi($data,'transaksi_pembelian');
 
-        //$id['data'] = $this->m_transaksi_pembelian->getid()->result();
-        foreach ($id['data'] as $list) {
-        	 $b = $list->id_transaksi_pembelian;
-        }
 
 		if($checks !=""){
 			foreach($checks as $a){
@@ -44,6 +40,7 @@ class c_transaksi_pembelian extends CI_Controller {
 					"harga" => $this->input->post("harga".$a),
 					"status" => 1
 				);
+				$total = 0;
 				$where = array('id_bahan' => $this->input->post("bahan".$a));
 				$this->m_transaksi_pembelian->tambah_transaksi($data1,'detail_transaksi_pembelian');
 				//$this->m_transaksi_pembelian->update_stok($where,$data,'stok_bahan');

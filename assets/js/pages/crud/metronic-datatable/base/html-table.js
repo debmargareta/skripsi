@@ -16,14 +16,36 @@ var KTDatatableHtmlTableDemo = function() {
 			},
 			columns: [
 				{
-					field: 'DepositPaid',
-					type: 'number',
+					field: 'ID',
+					type: 'ID',
 				},
 				{
-					field: 'OrderDate',
-					type: 'date',
-					format: 'YYYY-MM-DD',
-				}, {
+					field: 'Nama',
+					type: 'Nama',
+				}, 
+				{
+					field: 'Alamat',
+					type: 'Alamat',
+				},
+				{
+					field: 'No Telepon',
+					type: 'No Telepon',
+				}{
+					field: 'Gaji Harian',
+					type: 'Gaji Harian',
+				},
+				{
+					field: 'Tanggal Kerja',
+					type: 'Tanggal Kerja',
+				},
+				{
+					field: 'Peran',
+					type: 'Peran',
+				},
+				{
+					field: 'Aksi',
+					type: 'Aksi',
+				},{
 					field: 'Status',
 					title: 'Status',
 					autoHide: false,
