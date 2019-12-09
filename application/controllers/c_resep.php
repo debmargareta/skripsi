@@ -7,7 +7,7 @@ class c_resep extends CI_Controller {
   }
 
   public function tampil_resep(){
-    $data['kasbon'] = $this->m_kasbon->tampil_resep()->result();
+    $data['resep'] = $this->m_resep->tampil_resep()->result();
     $this->load->view('v_resep', $data);
   }
 
@@ -18,14 +18,21 @@ class c_resep extends CI_Controller {
   }
 
   public function save(){
-    $idkaryawan = $this->input->post('idKaryawan');
-    $jumlahkasbon = $this->input->post('jumlahKasbon');
-    $tanggalkasbon = $this->input->post('tanggalKasbon');
+    $checks = $this->input->post("counter");
 
-    $data = array($idkaryawan,$jumlahkasbon,$tanggal);
-    $this->m_kasbon->save_batch($data);
-
-    redirect('c_kasbon/tampil_kasbon');
+    if($checks !=""){
+      for($i=0;$i<$checks;$i++){
+       $data = array(
+        "id_kue" => $this->input->post("idKue"),
+        "id_bahan" => $this->input->post("idBahan".$i),
+        "takaran" => $this->input->post("takaran".$i),
+        "satuan" => $this->input->post("satuanBahan".$i),
+        "status" => 1,
+      );
+       $this->m_resep->tambah_resep($data,"resep");
+     }
+   }
+   redirect('c_resep/tampil_resep');
   }
 
   function edit_kasbon($idkasbon){

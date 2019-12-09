@@ -2,7 +2,7 @@
 
 class m_pesanan extends CI_Model{
     function tampil_pesanan	(){
-        $this->db->select('pesanan.id_pesanan, pesanan.id_pelanggan, pesanan.tanggal_pesanan, pesanan.tanggal_pengambilan, pesanan.id_admin, pelanggan.id_pelanggan, pelanggan.nama_pelanggan, pesanan.status')
+        $this->db->select('pesanan.id_pesanan, pesanan.kode_pesanan, pesanan.id_pelanggan, pesanan.tanggal_pesanan, pesanan.tanggal_pengambilan, pesanan.id_admin, pelanggan.id_pelanggan, pelanggan.nama_pelanggan, pesanan.status')
         ->from('pesanan')
         ->join('pelanggan','pesanan.id_pelanggan = pelanggan.id_pelanggan','inner')
         ->where('pesanan.status = 1'); 

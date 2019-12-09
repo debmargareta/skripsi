@@ -6,16 +6,23 @@ class c_pesanan extends CI_Controller {
 	function __construct(){
 		parent::__construct();
 		$this->load->model('m_pesanan');  
+		$this->load->helper('kode');
 	}
 
 	function tampil_tambah_pesanan(){
+		$row=$this->m_pesanan->tampil_pesanan()->num_rows();
+        $data['kode_pesanan'] = kodePesanan($row);
 		$data['pelanggan']=$this->m_pesanan->pelanggan()->result();
 		$data['kue']=$this->m_pesanan->kue()->result();
 		$this->load->view('v_tambah_pesanan',$data); 
 	}
 
 	function tambah_pesanan(){
-		$supplier = $this->input->post('pelanggan');
+		$row=$this->m_pesanan->tampil_pesanan()->num_rows();
+		$data['kode_pesanan'] = kodePesanan($row);
+		$kode = $data['kode_pesanan'];
+		$pelanggan = $this->input->post('pelanggan');
+		//$kode = $this->input->post('kode');
 		$admin = $this->session->id_admin;
 		$tanggalpesan = date('Y-m-d');
 		$tglambil = $this->input->post('tanggalPengambilan');
@@ -23,10 +30,12 @@ class c_pesanan extends CI_Controller {
 		$checks = $this->input->post("counter");
 
 		$data = array(
-			'id_pelanggan' => $supplier,
+			'id_pelanggan' => $pelanggan,
+			'kode_pesanan' => $kode,
 			'id_admin'=>$admin,
 			'tanggal_pesanan' => $tanggalpesan,
 			'tanggal_pengambilan' => $tanggalambil,
+			'status' => 1,
 		);
 
 		$id = $this->m_pesanan->tambah_pesanan($data,'pesanan');

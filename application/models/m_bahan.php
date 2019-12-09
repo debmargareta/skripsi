@@ -7,7 +7,7 @@ class m_bahan extends CI_Model{
     function tampil_bahan(){
         $this->db->select('bahan.id_bahan, bahan.nama_bahan, bahan.satuan_bahan, bahan.status, stok_bahan.id_stok, stok_bahan.id_bahan, stok_bahan.stok, stok_bahan.satuan')
         ->from('bahan')
-        ->join('stok_bahan','stok_bahan.id_bahan = bahan.id_bahan','inner'); 
+        ->join('stok_bahan','stok_bahan.id_bahan = bahan.id_bahan','inner');
         $query = $this->db->get();
         return $query;
     }
