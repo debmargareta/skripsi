@@ -24,21 +24,13 @@ class c_pembayaran_hutang extends CI_Controller {
             'tanggal_pembayaran' => $tgl,
             'status' => 1,
         );
-        // $data1 = $this->m_pembayaran_hutang->tampil_pembayaran()->result();
-        
-        // foreach ($data1 as $getid) {
-        //     $id_transaksi = $getid->id_transaksi_pembelian;
-        //     $bayar = $getid->nominal_bayar;
-        // }
-
         $get_hutang = $this->m_pembayaran_hutang->gethutang()->result();
 
         foreach ($get_hutang as $getnominal) {
             $total = $getnominal->total_harga;
         }
-        echo $total;
 
-        //if($nominal < $total){
+        if($nominal < $total){
 
             $hasil = $total - $nominal;
 
@@ -50,12 +42,12 @@ class c_pembayaran_hutang extends CI_Controller {
             $this->m_pembayaran_hutang->update_pembayaran($where, $data2,'transaksi_pembelian');
             $this->m_pembayaran_hutang->tambah_pembayaran($data,'pembayaran_hutang');
             redirect('c_pembayaran_hutang/tampil_pembayaran');
-       // }
-       //  else{
-       //      echo "<script>alert('test')</script>";
-       //      redirect('c_pembayaran_hutang/lihat_tambah_pembayaran');
-       //      $this->load->view('v_tambah_pembayaran_hutang.php');
-       //  }
+       }
+        else{
+            echo "<script>alert('test')</script>";
+            redirect('c_pembayaran_hutang/lihat_tambah_pembayaran');
+            $this->load->view('v_tambah_pembayaran_hutang.php');
+        }
         
   }
 

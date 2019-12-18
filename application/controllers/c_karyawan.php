@@ -37,7 +37,7 @@ class c_karyawan extends CI_Controller {
     
     function tampil_karyawan(){
         $data['tampil'] = $this->m_karyawan->tampil_karyawan()->result();
-        $this->load->view('v_test.php',$data);
+        $this->load->view('v_karyawan.php',$data);
     }
     
     function edit_karyawan($idkaryawan){

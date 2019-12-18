@@ -92,24 +92,24 @@ class c_admin extends CI_Controller {
         else{
             echo "password yang anda masukkan salah";
         }  
-    }   
-    function tambah_admin(){
-        $this->load->view("v_addadmin");
     }
-    function insert_admin(){
-        $tangkapid = $this->input->post('idadmin');
-        $tangkape = $this->input->post('email');
-        $tangkapn = $this->input->post('name');
-        $tangkapass = $this->input->post('pass');
+    function tambah_admin(){
+        $uname = $this->input->post('uname');
+        $nama = $this->input->post('nama');
+        $ks = $this->input->post('password');
+        $jk = $this->input->post('jk');
+        $jabatan = $this->input->post('jabatanadmin');
         
         $data = array(
-            'id_admin'=>$tangkapid,
-            'email'=>$tangkape,
-            'nama'=>$tangkapn,
-            'password'=>md5($tangkapass),
-            'status'=>1        );
-        $this->m_admin->insert_table($data,'admin');
-        redirect('c_admin/index');   
+            'username'=>$uname,
+            'nama_admin'=>$nama,
+            'katasandi'=>md5($ks),
+            'jenis_kelamin'=>$jk,
+            'jabatan_admin'=>$jabatan,
+            'status'=>1        
+        );
+       $this->m_admin->insert_table($data,'admin');
+       redirect('Welcome/index');   
     }
     function update_hapus($id_admin){
         $data = array(
@@ -118,5 +118,9 @@ class c_admin extends CI_Controller {
         $where = array('id_admin'=>$id_admin);
         $this->m_admin->update_hapus($where,$data,'admin');
         redirect('c_admin/index');
+    }
+    function keluar(){
+        $this->session->sess_destroy();
+        redirect('Welcome/index');
     }
 }

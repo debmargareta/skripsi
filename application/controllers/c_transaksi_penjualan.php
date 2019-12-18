@@ -17,17 +17,17 @@ class c_transaksi_penjualan extends CI_Controller {
     }
     
     function tambah_penjualan(){
-        // $row=$this->m_transaksi_penjualan->tampil_penjualan()->num_rows();
-        // $data['kode_penjualan'] = kodePenjualan($row);
-        // $kode = $data['kode_penjualan'];
+        $row=$this->m_transaksi_penjualan->tampil_penjualan()->num_rows();
+        $data['kode_penjualan'] = kodePenjualan($row);
+        $kode = $data['kode_penjualan'];
         $id = $this->input->post('idPesanan');
-        $kode = $this->input->post('kode');
+       // $kode = $this->input->post('kode');
         $metode = $this->input->post('metode');
         $nominal = $this->input->post('nominal');
         $tgl = date('Y-m-d');
         
         $data = array(
-            'id_pesanan' => $id,
+            'kode_pesanan' => $id,
             'kode_penjualan' => $kode,
             'tanggal' => $tgl,
             'total_harga' => $tgl,
@@ -39,7 +39,7 @@ class c_transaksi_penjualan extends CI_Controller {
         $data2 = array(
             'status_transaksi' => 1,
         );
-        $where = array('id_pesanan' => $id);
+        $where = array('kode_pesanan' => $id);
         $this->m_transaksi_penjualan->update_status_transaksi($where, $data2,'pesanan');
         redirect('c_transaksi_penjualan/tampil_penjualan');
     }
@@ -78,8 +78,6 @@ class c_transaksi_penjualan extends CI_Controller {
     function get_id_pesanan(){
          $id = $this->input->post('kode_pesanan');
          $data = $this->m_transaksi_penjualan->get_id_pesanan($id)->result();
-         //$data2 = $this->m_pembayaran_hutang->totalharga($id)->result();
-        // $hasil = array_merge($data, $data2);
          echo json_encode($data);
      }
 }

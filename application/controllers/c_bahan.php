@@ -16,20 +16,20 @@ class c_bahan extends CI_Controller {
     $checks = $this->input->post("counter");
 
     if($checks !=""){
-      foreach($checks as $a){
-       $data = array(
-        "nama_bahan" => $this->input->post("namaBahan".$a),
-        "satuan_bahan" => $this->input->post("satuanBahan".$a),
-        "status" => 1
-      );
-       $this->m_bahan->tambah_bahan($data,"bahan");
-     }
-   }
-   redirect('c_bahan/tampil_bahan');
- }
-    
+        foreach($checks as $a){
+            $data = array(
+                "nama_bahan" => $this->input->post("namaBahan".$a),
+                "satuan_bahan" => $this->input->post("satuanBahan".$a),
+                "status" => 1
+            );
+            $this->m_bahan->tambah_bahan($data,"bahan");
+        }
+    }
+    redirect('c_bahan/tampil_bahan');
+    }
+
     function tampil_bahan(){
-        $data['tampil'] = $this->m_bahan->tampil_bahan()->result();
+        $data['tampil'] = $this->m_bahan->tampil_bahan1()->result();
         $this->load->view('v_bahan.php',$data);
     }
     

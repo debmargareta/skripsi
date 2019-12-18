@@ -29,8 +29,13 @@ class c_resep extends CI_Controller {
         "satuan" => $this->input->post("satuanBahan".$i),
         "status" => 1,
       );
+       $data2 = array(
+          "status_resep" => 1,
+        );
        $this->m_resep->tambah_resep($data,"resep");
      }
+     $where = array("id_kue"=> $this->input->post("idKue"));
+     $this->m_resep->ubah_status_resep($where,$data2,"kue");
    }
    redirect('c_resep/tampil_resep');
   }
@@ -61,12 +66,12 @@ class c_resep extends CI_Controller {
     $this->m_kasbon->update_kasbon($where,$data,'kasbon');
     redirect('c_kasbon/tampil_kasbon');
   }
-  function hapus_kasbon($id){
+  function hapus_resep($id){
         $data = array(
             'status'=>0
         );
-        $where= array('id_kasbon'=>$id);
-        $this->m_kasbon->ubah_status_kasbon($where,$data,'kasbon');
-        redirect('c_kasbon/tampil_kasbon');
+        $where= array('id_kue'=>$id);
+        $this->m_resep->ubah_status_resep($where,$data,'resep');
+        redirect('c_resep/tampil_resep');
     }
 }

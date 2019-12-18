@@ -16,16 +16,23 @@ var KTDatatableHtmlTableDemo = function() {
 			},
 			columns: [
 				{
-					field: 'DepositPaid',
+					field: 'ID Bahan',
+					type: 'text',
+					autoHide: false,
+				},
+
+				{
+					field: 'Nama Bahan',
 					type: 'number',
+					autoHide: false,
 				},
 				{
-					field: 'OrderDate',
+					field: 'Satuan',
 					type: 'date',
-					format: 'YYYY-MM-DD',
+					autoHide: false,
 				}, {
-					field: 'Status',
-					title: 'Status',
+					field: 'Aksi',
+					title: 'Aksi',
 					autoHide: false,
 					// callback function support for column rendering
 					template: function(row) {
