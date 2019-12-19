@@ -35,6 +35,7 @@ class c_pesanan extends CI_Controller {
 			'id_admin'=>$admin,
 			'tanggal_pesanan' => $tanggalpesan,
 			'tanggal_pengambilan' => $tanggalambil,
+			'status_transaksi' => 0,
 			'status' => 1,
 		);
 

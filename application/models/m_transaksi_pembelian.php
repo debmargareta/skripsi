@@ -27,14 +27,12 @@ class m_transaksi_pembelian extends CI_Model{
         $this->db->where($where);
         $this->db->update($table,$data);
     }
-    function view_modal($where,$table){
-        return $this->db->get_where($table,$where);
-    }
+    
     function totalharga($id){
         return $this->db->query("SELECT SUM(harga) as totalharga FROM detail_transaksi_pembelian where kode_pembelian = '$id'");
     }
     function tampil_detail_transaksi_pembelian(){
-    	$this->db->select('bahan.id_bahan, bahan.nama_bahan, detail_transaksi_pembelian.id_detail_transaksi_pembelian, detail_transaksi_pembelian.kode_pembelian, detail_transaksi_pembelian.id_bahan, detail_transaksi_pembelian.jumlah, detail_transaksi_pembelian.satuan, detail_transaksi_pembelian.harga, transaksi_pembelian.kode_pembelian')
+    	$this->db->select('bahan.id_bahan, bahan.nama_bahan, detail_transaksi_pembelian.id_detail_transaksi_pembelian, detail_transaksi_pembelian.kode_pembelian, detail_transaksi_pembelian.id_bahan, detail_transaksi_pembelian.jumlah, detail_transaksi_pembelian.satuan, detail_transaksi_pembelian.harga, transaksi_pembelian.kode_pembelian, transaksi_pembelian.total_harga')
     	->from('detail_transaksi_pembelian')
     	->join('bahan','detail_transaksi_pembelian.id_bahan = bahan.id_bahan')
     	->join('transaksi_pembelian', 'detail_transaksi_pembelian.kode_pembelian = transaksi_pembelian.kode_pembelian');

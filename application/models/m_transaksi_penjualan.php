@@ -8,7 +8,10 @@ class m_transaksi_penjualan extends CI_Model{
         return $this->db->query("SELECT * FROM pesanan WHERE status ='1' and status_transaksi='0'");
     }
     function tampil_penjualan(){
-        return $this->db->query("SELECT transaksi_penjualan.kode_penjualan, transaksi_penjualan.kode_pesanan, transaksi_penjualan.tanggal, transaksi_penjualan.total_harga, transaksi_penjualan.status_pembayaran, pesanan.kode_pesanan, pesanan.id_pelanggan, pesanan.tanggal_pesanan, pesanan.tanggal_pengambilan, detail_pesanan.id_detail_pesanan, detail_pesanan.kode_pesanan, detail_pesanan.id_kue, detail_pesanan.jumlah, kue.nama_kue, kue.id_kue,pelanggan.nama_pelanggan, pelanggan.id_pelanggan, pesanan.status_transaksi FROM transaksi_penjualan INNER JOIN pesanan on transaksi_penjualan.kode_pesanan = pesanan.kode_pesanan INNER JOIN detail_pesanan on detail_pesanan.kode_pesanan = pesanan.kode_pesanan INNER JOIN kue on kue.id_kue = detail_pesanan.id_kue INNER JOIN pelanggan on pesanan.id_pelanggan = pelanggan.id_pelanggan WHERE pesanan.status_transaksi = 1");
+        return $this->db->query("SELECT * from transaksi_penjualan");
+    }
+    function detail_penjualan(){
+        return $this->db->query("SELECT transaksi_penjualan.kode_penjualan, transaksi_penjualan.kode_pesanan, transaksi_penjualan.tanggal, transaksi_penjualan.total_harga, transaksi_penjualan.status_pembayaran, pesanan.kode_pesanan, pesanan.id_pelanggan, pesanan.tanggal_pesanan, pesanan.tanggal_pengambilan, detail_pesanan.id_detail_pesanan, detail_pesanan.kode_pesanan, detail_pesanan.id_kue, detail_pesanan.jumlah, detail_pesanan.satuan, kue.nama_kue, kue.id_kue,pelanggan.nama_pelanggan, pelanggan.id_pelanggan, pesanan.status_transaksi FROM transaksi_penjualan INNER JOIN pesanan on transaksi_penjualan.kode_pesanan = pesanan.kode_pesanan INNER JOIN detail_pesanan on detail_pesanan.kode_pesanan = pesanan.kode_pesanan INNER JOIN kue on kue.id_kue = detail_pesanan.id_kue INNER JOIN pelanggan on pesanan.id_pelanggan = pelanggan.id_pelanggan WHERE pesanan.status_transaksi = 1");
     }
     function edit_pelanggan($where,$table){
         return $this->db->get_where($table,$where);

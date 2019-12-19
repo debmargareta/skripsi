@@ -20,7 +20,7 @@ class c_piutang extends CI_Controller {
         $tgl = date('Y-m-d');
         
         $data = array(
-            'id_transaksi_penjualan' => $id,
+            'kode_penjualan' => $id,
             'jenis_cicilan' => $nominal,
             'status' => 1,
         );
@@ -55,7 +55,7 @@ class c_piutang extends CI_Controller {
             "total_harga"=>$hasil,
         );
 
-        $where = array('id_transaksi_penjualan'=> $idpiutang);
+        $where = array('kode_penjualan'=> $idpiutang);
         $this->m_piutang->update_piutang($where, $data2,'transaksi_penjualan');
         //$this->m_pembayaran_hutang->tambah_pembayaran($data,'pembayaran_hutang');
         redirect('c_pembayaran_hutang/tampil_pembayaran');
@@ -108,7 +108,7 @@ class c_piutang extends CI_Controller {
         redirect('c_supplier/tampil_supplier');
     }
     function get_id_transaksi(){
-     $id = $this->input->post('id_transaksi_penjualan');
+     $id = $this->input->post('kode_penjualan');
      $data = $this->m_piutang->get_id_transaksi($id)->result();
    // $data2 = $this->m_pembayaran_hutang->totalharga($id)->result();
    // $hasil = array_merge($data, $data2);

@@ -46,6 +46,7 @@ class c_transaksi_penjualan extends CI_Controller {
     
     function tampil_penjualan(){
         $data['tampil'] = $this->m_transaksi_penjualan->tampil_penjualan()->result();
+        $data['tampil1'] = $this->m_transaksi_penjualan->detail_penjualan()->result();
         $this->load->view('v_transaksi_penjualan.php',$data);
     }
     
