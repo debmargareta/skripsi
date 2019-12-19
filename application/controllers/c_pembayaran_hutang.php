@@ -19,7 +19,7 @@ class c_pembayaran_hutang extends CI_Controller {
         $tgl = date('Y-m-d');
         
         $data = array(
-            'id_transaksi_pembelian' => $id,
+            'kode_pembelian' => $id,
             'nominal_bayar' => $nominal,
             'tanggal_pembayaran' => $tgl,
             'status' => 1,
@@ -30,7 +30,7 @@ class c_pembayaran_hutang extends CI_Controller {
             $total = $getnominal->total_harga;
         }
 
-        if($nominal < $total){
+        if($nominal <= $total){
 
             $hasil = $total - $nominal;
 
@@ -38,7 +38,7 @@ class c_pembayaran_hutang extends CI_Controller {
                 "total_harga"=>$hasil,
             );
 
-            $where = array('id_transaksi_pembelian'=> $id);
+            $where = array('kode_pembelian'=> $id);
             $this->m_pembayaran_hutang->update_pembayaran($where, $data2,'transaksi_pembelian');
             $this->m_pembayaran_hutang->tambah_pembayaran($data,'pembayaran_hutang');
             redirect('c_pembayaran_hutang/tampil_pembayaran');
@@ -46,7 +46,6 @@ class c_pembayaran_hutang extends CI_Controller {
         else{
             echo "<script>alert('test')</script>";
             redirect('c_pembayaran_hutang/lihat_tambah_pembayaran');
-            $this->load->view('v_tambah_pembayaran_hutang.php');
         }
         
   }
@@ -92,7 +91,7 @@ function hapus_supplier($id){
     redirect('c_supplier/tampil_supplier');
 }
 function get_id_transaksi(){
-   $id = $this->input->post('id_transaksi_pembelian');
+   $id = $this->input->post('kode_pembelian');
    $data = $this->m_pembayaran_hutang->get_id_transaksi($id)->result();
    // $data2 = $this->m_pembayaran_hutang->totalharga($id)->result();
    // $hasil = array_merge($data, $data2);

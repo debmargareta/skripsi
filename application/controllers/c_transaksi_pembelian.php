@@ -34,7 +34,7 @@ class c_transaksi_pembelian extends CI_Controller {
 			'status_pembayaran' => $metode,
 		);
 
-		$id = $this->m_transaksi_pembelian->tambah_transaksi($data,'transaksi_pembelian');
+		$this->m_transaksi_pembelian->tambah_transaksi($data,'transaksi_pembelian');
 
 
 		if($checks !=""){
@@ -60,7 +60,7 @@ class c_transaksi_pembelian extends CI_Controller {
 					"total_harga"=>$total1->totalharga,
 				);
 				
-				$where = array('kode_pembelian'=> $id);
+				$where = array('kode_pembelian'=> $kode);
 				$this->m_transaksi_pembelian->update_transaksi($where, $data2,'transaksi_pembelian');
 			}
 		}
