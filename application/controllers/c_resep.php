@@ -40,31 +40,35 @@ class c_resep extends CI_Controller {
    redirect('c_resep/tampil_resep');
   }
 
-  function edit_kasbon($idkasbon){
-    $where = array('id_kasbon'=>$idkasbon);
-    $data['edit_kasbon'] = $this->m_kasbon->edit_kasbon($where,'kasbon')->result();
-    $data['pilihkaryawan']=$this->m_kasbon->pilihkaryawan()->result();
-    $this->load->view('v_edit_kasbon.php',$data);
+  function edit_resep($idkue){
+    $where = array('id_kue'=>$idkue);
+    $data['edit_kue'] = $this->m_resep->edit_resep($where,'resep')->result();
+    $data['pilih_bahan']=$this->m_resep->pilihbahan()->result();
+    $data['pilih_kue']=$this->m_resep->pilihkue()->result();
+    $data['pilih_satuan']=$this->m_resep->pilihsatuan()->result();
+    $this->load->view('v_edit_resep.php',$data);
   }
 
-  function update_kasbon(){
-    $u_id = $this->input->post('idKasbon');
-    $u_id_karyawan = $this->input->post('idKaryawan');
-    $u_jumlah = $this->input->post('jumlahKasbon');
-    $u_tgl = $this->input->post('tglKasbon');
-    $u_tanggal = date('Y-m-d', strtotime($u_tgl));
+  function update_resep(){
+    $namakkue = $this->input->post("namaKue");
+    $checks = $this->input->post("counter");
 
-    $data = array(
-      'id_karyawan' => $u_id_karyawan,
-      'jumlah_kasbon' => $u_jumlah,
-      'tanggal_kasbon' => $u_tanggal,
-      'status' => 1,
-    );
-
-    $where = array('id_kasbon' => $u_id);
-
-    $this->m_kasbon->update_kasbon($where,$data,'kasbon');
-    redirect('c_kasbon/tampil_kasbon');
+    if($checks !=""){
+      foreach($checks as $i){
+       $data = array(
+        "id_kue" => $this->input->post("namaKue"),
+        "id_bahan" => $this->input->post("idBahan".$i),
+        "takaran" => $this->input->post("takaran".$i),
+        "id_satuan" => $this->input->post("satuanBahan".$i),
+        "status" => 1,
+      );
+       print_r($data);
+       $where = array("id_resep"=> $i);
+       $this->m_resep->update_resep($where,$data,'resep');
+     }
+     
+   }
+   redirect('c_resep/tampil_resep');
   }
   function hapus_resep($id){
         $data = array(

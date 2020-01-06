@@ -58,7 +58,7 @@ class c_piutang extends CI_Controller {
         $where = array('kode_penjualan'=> $idpiutang);
         $this->m_piutang->update_piutang($where, $data2,'transaksi_penjualan');
         //$this->m_pembayaran_hutang->tambah_pembayaran($data,'pembayaran_hutang');
-        redirect('c_pembayaran_hutang/tampil_pembayaran');
+        redirect('c_piutang/tampil_pembayaran');
        // }
        //  else{
        //      echo "<script>alert('test')</script>";

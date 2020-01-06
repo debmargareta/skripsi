@@ -28,6 +28,14 @@ function kodePembelian($pembelian){
     $kode_pembelian = "KTR-PEMB-".$newpemb."-".$day."-".$month."-".$year;
     return $kode_pembelian;
 }
+function kodeRetur($retur){
+    $newretur = $retur+1;
+    $day = date("d");
+    $month = date ("m");
+    $year = date ("Y");
+    $retur_penjualan = "RTR-PENJ-".$newretur."-".$day."-".$month."-".$year;
+    return $retur_penjualan;
+}
 //helper untuk menyimpan function, kalau diakses ke banyak file, bisa ditaruh di dalam helper. mengefisienkan penggunaan coding.
 //helper mempermudah dalam menyimpan function yang diakses banyak.
 //nama file helper WAJIB ada _helper.

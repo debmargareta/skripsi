@@ -14,6 +14,7 @@ class c_transaksi_pembelian extends CI_Controller {
         $data['kode_pembelian'] = kodePembelian($row);
 		$data['supplier']=$this->m_transaksi_pembelian->supplier()->result();
 		$data['bahan']=$this->m_transaksi_pembelian->bahan()->result();
+		$data['satuan']=$this->m_transaksi_pembelian->satuan()->result();
 		$this->load->view('v_tambah_transaksi_pembelian',$data); 
 	}
 
@@ -43,7 +44,7 @@ class c_transaksi_pembelian extends CI_Controller {
 					"kode_pembelian"=>$kode,
 					"id_bahan" => $this->input->post("bahan".$a),
 					"jumlah" => $this->input->post("jumlah".$a),
-					"satuan" => $this->input->post("satuanBahan".$a),
+					"id_satuan" => $this->input->post("satuanBahan".$a),
 					"harga" => $this->input->post("harga".$a),
 					"status" => 1
 				);
@@ -62,6 +63,37 @@ class c_transaksi_pembelian extends CI_Controller {
 				
 				$where = array('kode_pembelian'=> $kode);
 				$this->m_transaksi_pembelian->update_transaksi($where, $data2,'transaksi_pembelian');
+
+				$where1 =  $this->input->post("satuanBahan".$a);
+				$where2 = $this->input->post("bahan".$a);
+
+				$getdetail = $this->m_transaksi_pembelian->detailsatuan($where1, $where2)->row();
+				$nilai_satuan = $getdetail->nilai_satuan_gram;
+				//echo $nilai_satuan;
+				$numrow= $this->m_transaksi_pembelian->detailsatuan($where1, $where2)->num_rows();
+				$jumlah_beli=$this->input->post("jumlah".$a);
+				
+				if($numrow>0){
+					$nilai_akhir = $jumlah_beli*$nilai_satuan;
+				}
+				else{
+					$nilai_akhir = $jumlah_beli;
+				}
+
+				$getstokbahan = $this->m_transaksi_pembelian->stok_bahan($where2)->row();
+				$stok_bahan = $getstokbahan->stok;
+				
+
+				$stok_bahan+=$nilai_akhir;
+
+				$data3 = array(
+					"stok" => $stok_bahan,
+				);
+				$where3 = array(
+					'id_bahan' => $this->input->post("bahan".$a),
+				);
+				$this->m_transaksi_pembelian->update_transaksi($where3,$data3,'bahan');
+
 			}
 		}
 		redirect('c_transaksi_pembelian/tampil_transaksi');
@@ -72,12 +104,6 @@ class c_transaksi_pembelian extends CI_Controller {
 		$data['detail']=$this->m_transaksi_pembelian->tampil_detail_transaksi_pembelian()->result();
 		$this->load->view('v_transaksi_pembelian',$data);
 	}
-
-	// function modal($id_transaksi_pembelian){
-	// 	$where = array('detail_transaksi_pembelian.id_transaksi_pembelian'=>$id_transaksi_pembelian);
-	// 	$data['detail'] = $this->m_transaksi_pembelian->tampil_detail_transaksi_pembelian($where)->result();
-	// 	$this->load->view('modal_transaksi_pembelian',$data);
-	// }
 
 	function edit_transaksi($idtransaksi){
 		$where = array('kode_pembelian'=>$idtransaksi);
