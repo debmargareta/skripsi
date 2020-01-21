@@ -6,14 +6,16 @@ class m_bahan extends CI_Model{
         return $this->db->insert_id();
     }
     function tampil_bahan(){
-        $this->db->select('bahan.id_bahan, bahan.nama_bahan, bahan.satuan_bahan, bahan.status, stok_bahan.id_stok, stok_bahan.id_bahan, stok_bahan.stok, stok_bahan.satuan')
+        $this->db->select('bahan.id_bahan, bahan.nama_bahan, bahan.golongan_biaya, bahan.stok, bahan.id_satuan, bahan.status, satuan.id_satuan, satuan.nama_satuan')
         ->from('bahan')
-        ->join('stok_bahan','stok_bahan.id_bahan = bahan.id_bahan','inner');
+        ->join('satuan','satuan.id_satuan = bahan.id_satuan','inner')
+        ->where('bahan.status=1');
         $query = $this->db->get();
         return $query;
-    }
-    function tampil_bahan1(){
-        return $this->db->query("SELECT * from bahan where status=1");
+    }//view data
+    function edit_satuan(){
+        return $this->db->query("SELECT * FROM satuan where status = 1 ");
+
     }
     function edit_bahan($where,$table){
         return $this->db->get_where($table,$where);

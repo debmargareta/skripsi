@@ -55,41 +55,6 @@ class c_pembayaran_hutang extends CI_Controller {
     $this->load->view('v_pembayaran_hutang.php',$data);
 }
 
-function edit_supplier($idsupplier){
-    $where = array('id_supplier'=>$idsupplier);
-    $data['edit_supplier'] = $this->m_supplier->edit_supplier($where,'supplier')->result();
-    $this->load->view('v_edit_supplier.php',$data);
-}
-
-function update_supplier(){
-    $u_id_supplier = $this->input->post('idSupplier');
-    $u_nama_supplier = $this->input->post('namaSupplier');
-    $u_nama_toko = $this->input->post('namaToko');
-    $u_alamat_supplier = $this->input->post('alamatToko');
-    $u_no_telp_supplier = $this->input->post('noToko');
-
-    $data = array(
-        'id_supplier' =>$u_id_supplier,
-        'nama_supplier' =>$u_nama_supplier,
-        'nama_toko' =>$u_nama_toko,
-        'alamat_supplier' =>$u_alamat_supplier,
-        'no_telp_supplier' =>$u_no_telp_supplier,
-        'status' =>1,
-    );
-    $where = array('id_supplier' => $u_id_supplier);
-
-    $this->m_supplier->update_supplier($where,$data,'supplier');
-    redirect('c_supplier/tampil_supplier');
-}
-
-function hapus_supplier($id){
-    $data = array(
-        'status'=>0
-    );
-    $where= array('id_supplier'=>$id);
-    $this->m_supplier->ubah_status_supplier($where,$data,'supplier');
-    redirect('c_supplier/tampil_supplier');
-}
 function get_id_transaksi(){
    $id = $this->input->post('kode_pembelian');
    $data = $this->m_pembayaran_hutang->get_id_transaksi($id)->result();

@@ -112,6 +112,7 @@ class c_transaksi_pembelian extends CI_Controller {
 		$data['detail1'] = $this->m_transaksi_pembelian->bahan()->result();
 		$data['supplier'] = $this->m_transaksi_pembelian->supplier()->result();
 		$data['edit'] = $this->m_transaksi_pembelian->getbahan($where2)->result();
+		$data['satuan'] = $this->m_transaksi_pembelian->satuan()->result();
 		$this->load->view('v_edit_transaksi_pembelian.php',$data);
 	}
 	function update_transaksi(){
@@ -138,7 +139,7 @@ class c_transaksi_pembelian extends CI_Controller {
 				$data1 = array(
 					"id_bahan" => $this->input->post("bahan".$a),
 					"jumlah" => $this->input->post("jumlah".$a),
-					"satuan" => $this->input->post("satuan".$a),
+					"id_satuan" => $this->input->post("satuan".$a),
 					"harga" => $this->input->post("harga".$a),
 					"status" => 1
 				);

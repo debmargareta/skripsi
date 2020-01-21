@@ -49,6 +49,11 @@ class c_admin extends CI_Controller {
         $this->load->view('v_edit_profil.php',$data);
     }
 
+    function tampil_admin(){
+        $data['admin'] = $this->m_admin->masteradmin()->result();
+        $this->load->view('v_master_admin.php',$data);
+    }
+
     function ubah_profil(){
         $tangkapuname= $this->input->post('username');
         $tangkapnama= $this->input->post('nama');
@@ -123,4 +128,5 @@ class c_admin extends CI_Controller {
         $this->session->sess_destroy();
         redirect('Welcome/index');
     }
+
 }

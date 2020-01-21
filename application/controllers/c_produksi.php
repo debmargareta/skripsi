@@ -56,18 +56,6 @@ class c_produksi extends CI_Controller {
         }
     }
     redirect('c_produksi/tampil_produksi');
-
-//     for(ini jumlah item yang dipesen){
-//      dapet id_kue
-//      pake id kue, cari bahan untuk bkin kue itu apa aja dan berapa jumlahnya
-//      for(jumlah jenis bahan)
-//            dari id bahan, ambil stoknya
-//            lalu stok dikurang jumlah bahan (perjenisnya) * jumlah pesenan
-//            update ke table bahan, ngurangin stoknya
-//      lalu dari id kue, ambil stok kue 
-//      stok kue + jumlah pesanan 
-//      update ke table stok kue
-// selesai
     }
 
     function tampil_produksi(){
@@ -75,36 +63,5 @@ class c_produksi extends CI_Controller {
         $this->load->view('v_produksi.php',$data);
     }
     
-    function edit_bahan($idbahan){
-        $where = array('id_bahan'=>$idbahan);
-        $data['edit_bahan'] = $this->m_bahan->edit_bahan($where,'bahan')->result();
-        $this->load->view('v_edit_bahan.php',$data);
-    }
-    
-    function update_bahan(){
-        $u_id = $this->input->post('idBahan');
-        $u_nama = $this->input->post('namaBahan');
-        $u_satuan = $this->input->post('satuanBahan');
-        
-        $data = array(
-            'id_bahan' =>$u_id,
-            'nama_bahan' =>$u_nama,
-            'satuan_bahan' =>$u_satuan,
-            'status' =>1,
-        );
-        $where = array('id_bahan' => $u_id);
-        
-        $this->m_bahan->update_bahan($where,$data,'bahan');
-        redirect('c_bahan/tampil_bahan');
-    }
-    
-    function hapus_bahan($id){
-        $data = array(
-            'status'=>0
-        );
-        $where= array('id_bahan'=>$id);
-        $this->m_bahan->ubah_status_bahan($where,$data,'bahan');
-        redirect('c_bahan/tampil_bahan');
-    }
 }
 ?>

@@ -9,7 +9,7 @@ class m_piutang extends CI_Model{
         return $this->db->query("SELECT * FROM transaksi_penjualan WHERE status_pembayaran ='Hutang'");
     }
     function tampil_pembayaran(){
-        return $this->db->query("SELECT * FROM piutang, transaksi_penjualan, pesanan, pelanggan INNER JOIN transaksi_pembelian on piutang.kode_penjualan = transaksi_penjualan.kode_penjualan INNER JOIN pesanan on transaksi_penjualan.kode_pesanan = pesanan.kode_pesanan INNER JOIN pesanan.id_pelanggan = pelanggan.id_pelanggan");
+        return $this->db->query("SELECT * FROM piutang INNER JOIN transaksi_penjualan on piutang.kode_penjualan = transaksi_penjualan.kode_penjualan INNER JOIN pesanan on transaksi_penjualan.kode_pesanan = pesanan.kode_pesanan INNER JOIN pelanggan on pesanan.id_pelanggan = pelanggan.id_pelanggan");
     }
     function edit_pelanggan($where,$table){
         return $this->db->get_where($table,$where);

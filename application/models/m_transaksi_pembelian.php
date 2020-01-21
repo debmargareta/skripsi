@@ -26,7 +26,7 @@ class m_transaksi_pembelian extends CI_Model{
         $this->db->insert($table,$data);
     }
     function getbahan($where2){
-        return $this->db->query("SELECT  bahan.id_bahan, bahan.nama_bahan, bahan.id_satuan, detail_transaksi_pembelian.id_detail_transaksi_pembelian, detail_transaksi_pembelian.kode_pembelian, detail_transaksi_pembelian.id_bahan, detail_transaksi_pembelian.jumlah, detail_transaksi_pembelian.id_satuan, detail_transaksi_pembelian.harga from detail_transaksi_pembelian inner join bahan ON bahan.id_bahan = detail_transaksi_pembelian.id_bahan inner join satuan on bahan.id_satuan = satuan.id_satuan inner join satuan on detail_transaksi_pembelian.id_satuan = satuan.id_satuan WHERE detail_transaksi_pembelian.kode_pembelian = '$where2'");
+        return $this->db->query("SELECT  bahan.id_bahan, bahan.nama_bahan, bahan.id_satuan, detail_transaksi_pembelian.id_detail_transaksi_pembelian, detail_transaksi_pembelian.kode_pembelian, detail_transaksi_pembelian.id_bahan, detail_transaksi_pembelian.jumlah, detail_transaksi_pembelian.id_satuan, detail_transaksi_pembelian.harga, satuan.id_satuan from detail_transaksi_pembelian inner join bahan ON bahan.id_bahan = detail_transaksi_pembelian.id_bahan inner join satuan on bahan.id_satuan = satuan.id_satuan WHERE detail_transaksi_pembelian.kode_pembelian = '$where2'");
     }
     function edit_transaksi($where,$table){
         return $this->db->get_where($table,$where);

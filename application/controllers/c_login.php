@@ -37,6 +37,7 @@ class c_login extends CI_Controller {
                 $data_session = array(
                     'nama_admin' => $d, 
                     'username' => $tangkapUsername, 
+                    'jabatan_admin' => $b, 
                     'id_admin' => $a,
                 );
                 $this->session->set_userdata($data_session);
@@ -44,7 +45,7 @@ class c_login extends CI_Controller {
                     redirect('c_login/admin');
                 }
                 else{
-                    redirect('c_pelanggan/tampil_pelanggan');
+                    redirect('c_login/admin');
                 }
                 
             }

@@ -20,6 +20,9 @@ class m_admin extends CI_Model {
     function cek_pass($where,$table){
         return $this->db->get_where($table,$where);
     }
+    function masteradmin(){
+        return $this->db->query("SELECT * FROM admin");
+    }
 }
 
 ?>

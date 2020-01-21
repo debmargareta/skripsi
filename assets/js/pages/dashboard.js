@@ -122,7 +122,7 @@ var KTDashboard = function() {
 
         var chart = new Chart(chartContainer, {
             type: 'bar',
-            data: chartData,
+            data: kt_chart_activitiesData,
             options: {
                 title: {
                     display: false,

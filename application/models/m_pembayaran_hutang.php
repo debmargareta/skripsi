@@ -26,7 +26,7 @@ class m_pembayaran_hutang extends CI_Model{
         $this->db->update($table,$data);
     }
     function get_id_transaksi($id){
-        return $this->db->query("SELECT transaksi_pembelian.kode_pembelian, transaksi_pembelian.total_harga, detail_transaksi_pembelian.id_detail_transaksi_pembelian, detail_transaksi_pembelian.kode_pembelian, detail_transaksi_pembelian.id_bahan, detail_transaksi_pembelian.jumlah, detail_transaksi_pembelian.satuan, detail_transaksi_pembelian.harga, bahan.id_bahan, bahan.nama_bahan FROM detail_transaksi_pembelian INNER JOIN transaksi_pembelian ON transaksi_pembelian.kode_pembelian = detail_transaksi_pembelian.kode_pembelian INNER JOIN bahan on detail_transaksi_pembelian.id_bahan = bahan.id_bahan WHERE transaksi_pembelian.kode_pembelian ='$id'");;
+        return $this->db->query("SELECT transaksi_pembelian.kode_pembelian, transaksi_pembelian.total_harga, detail_transaksi_pembelian.id_detail_transaksi_pembelian, detail_transaksi_pembelian.kode_pembelian, detail_transaksi_pembelian.id_bahan, detail_transaksi_pembelian.jumlah, detail_transaksi_pembelian.id_satuan, detail_transaksi_pembelian.harga, bahan.id_bahan, bahan.nama_bahan, satuan.nama_satuan, satuan.id_satuan FROM detail_transaksi_pembelian INNER JOIN transaksi_pembelian ON transaksi_pembelian.kode_pembelian = detail_transaksi_pembelian.kode_pembelian INNER JOIN bahan on detail_transaksi_pembelian.id_bahan = bahan.id_bahan INNER join satuan on detail_transaksi_pembelian.id_satuan = satuan.id_satuan WHERE transaksi_pembelian.kode_pembelian ='$id'");;
     }
     function totalharga($id){
         return $this->db->query("SELECT SUM(harga) as totalharga FROM detail_transaksi_pembelian where id_transaksi_pembelian = '$id'");

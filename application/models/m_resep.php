@@ -2,14 +2,17 @@
 
 class m_resep extends CI_Model{
     function pilihkue(){
-        return $this->db->query('select * from kue where status_resep=1');
-    }
+        return $this->db->query('select * from kue where status_resep=0');
+    }//dropdown nama kue di v_tambah_resep
     function pilihbahan(){
         return $this->db->get('bahan');
-    }
+    }//dropdown nama bahan di v_tambah_resep
     function pilihsatuan(){
         return $this->db->query('select * from satuan where status=1');;
-    }
+    }//dropdown nama satuan di v_tambah_resep
+    function pilihkueedit(){
+        return $this->db->query('select * from kue where status_resep=1');
+    }//dropdown nama kue yg ud ada resepnya di edit resep
     function tampil_resep(){
         $this->db->select('resep.id_resep, resep.id_kue, resep.id_bahan, resep.takaran, resep.id_satuan, bahan.id_bahan, bahan.nama_bahan, kue.id_kue, kue.nama_kue, kue.jenis_kue, satuan.id_satuan, satuan.nama_satuan')
         ->from('resep')
@@ -23,7 +26,6 @@ class m_resep extends CI_Model{
     function tambah_resep($data,$table){
         $this->db->insert($table,$data);
     }
-    
     function edit_resep($where,$table){
         return $this->db->get_where($table,$where);
     }
