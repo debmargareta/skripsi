@@ -116,9 +116,8 @@ class c_transaksi_pembelian extends CI_Controller {
 		$this->load->view('v_edit_transaksi_pembelian.php',$data);
 	}
 	function update_transaksi(){
-		$row=$this->m_transaksi_pembelian->tampil_transaksi()->num_rows();
-        $data['kode_pembelian'] = kodePembelian($row);
-        $kode = $data['kode_pembelian'];
+		$kode = $this->input->post('kodePembelian');
+		//echo $kode;
 		$supplier = $this->input->post('supplier');
 		$metode = $this->input->post('metode');
 		$tgl = $this->input->post('tanggalPembelian');
@@ -146,8 +145,24 @@ class c_transaksi_pembelian extends CI_Controller {
 
 				$where = array('id_detail_transaksi_pembelian'=> $a);
 				$this->m_transaksi_pembelian->update_transaksi($where,$data1,'detail_transaksi_pembelian');
+
+				$total = $this->m_transaksi_pembelian->totalharga($kode)->result();
+				print_r($total);
+				foreach($total as $total1){
+					$total1->totalharga;
+				}
+
+				$data2 = array(
+					"total_harga"=>$total1->totalharga,
+				);
+				
+				$where = array('kode_pembelian'=> $kode);
+				$this->m_transaksi_pembelian->update_transaksi($where, $data2,'transaksi_pembelian');
+
+				
 			}
 		}
+		
 		redirect('c_transaksi_pembelian/tampil_transaksi');
 	}
 	

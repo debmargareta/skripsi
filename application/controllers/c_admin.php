@@ -122,7 +122,7 @@ class c_admin extends CI_Controller {
         );
         $where = array('id_admin'=>$id_admin);
         $this->m_admin->update_hapus($where,$data,'admin');
-        redirect('c_admin/index');
+        redirect('c_admin/tampil_admin');
     }
     function keluar(){
         $this->session->sess_destroy();

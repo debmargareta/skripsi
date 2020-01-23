@@ -779,8 +779,34 @@ var KTDashboard = function() {
         if ($('#kt_chart_activities').length == 0) {
             return;
         }
+        var bulan = [];
 
         var ctx = document.getElementById("kt_chart_activities").getContext("2d");
+
+        $.ajax({
+            url : "getDataForDashboard",
+            method : 'POST',
+            dataType : 'JSON',
+            success : function(data) {
+                console.log(data);
+                for(var i = 0; i < 12; i++) { // 12 karena ada 12 bulan yg perlu dihitung
+                    var counter = 0; // buat nampung jumlah bulanan
+                    for(var j = 0; j < data.length; j++) {
+                        var tgl = new Date(data[j].tanggal);
+                        var bln = tgl.getMonth();
+                        if(bln == i) {
+                            if(data[j].satuan == 'Lusin') {
+                                counter += parseInt(data[j].jumlah)*12;
+                            }
+                            else {
+                                counter += parseInt(data[j].jumlah);
+                            }
+                        }
+                    }
+                    bulan.push(counter);
+                }
+            }
+        });
 
         var gradient = ctx.createLinearGradient(0, 0, 0, 240);
         gradient.addColorStop(0, Chart.helpers.color('#e14c86').alpha(1).rgbString());
@@ -789,7 +815,7 @@ var KTDashboard = function() {
         var config = {
             type: 'line',
             data: {
-                labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October"],
+                labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
                 datasets: [{
                     label: "Sales Stats",
                     backgroundColor: Chart.helpers.color('#e14c86').alpha(1).rgbString(),  //gradient
@@ -801,9 +827,7 @@ var KTDashboard = function() {
                     pointHoverBorderColor: Chart.helpers.color('#ffffff').alpha(0.1).rgbString(),
 
                     //fill: 'start',
-                    data: [
-                        10, 14, 12, 16, 9, 11, 13, 9, 13, 15
-                    ]
+                    data: bulan
                 }]
             },
             options: {

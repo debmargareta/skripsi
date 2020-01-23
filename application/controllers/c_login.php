@@ -64,9 +64,18 @@ class c_login extends CI_Controller {
     }
     
     function admin(){
+        $data['count_pesanan'] = $this->m_beranda->count_pesanan()->result();
+        $data['count_pelanggan'] = $this->m_beranda->count_pelanggan()->result();
+        $data['count_karyawan'] = $this->m_beranda->count_karyawan()->result();
         $data['admin'] = $this->m_beranda->tampil_admin()->result();
         $data['username'] = $this->session->admin_username;
         //$data['notification'] = $this->m_Project->notification()->result();
-        $this->load->view('v_beranda.php',$data); 
+        $this->load->view('v_beranda.php',$data);
+    }
+
+    function getDataForDashboard() { // pake ini buat select chart
+        $data = $this->m_beranda->transaksi_penjualan()->result();
+
+        echo json_encode($data);
     }
 }

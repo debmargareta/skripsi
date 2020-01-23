@@ -16,66 +16,58 @@ class c_hpp extends CI_Controller {
     }
     
     function save(){
+        $kue = $this->input->post("kue");
         $tahun = $this->input->post("tahun");
         $bulan = $this->input->post("bulan");
         $checks = $this->input->post("counter");
         $checks1 = $this->input->post("counter1");
 
+        $bahan_baku = $this->m_hpp->bahan_baku($kue,$bulan,$tahun)->result();
+        $total_bahan_baku = $this->m_hpp->total_bahan_baku($kue,$bulan,$tahun)->result();
+
+        // $tkl=$this->m_hpp->tkl($bulan,$tahun);
+        // $total_tkl=$this->m_hpp->total_tkl($bulan,$tahun);
+
+        $bo=$this->m_hpp->bo($bulan,$tahun)->result();
+        $total_bo=$this->m_hpp->total_bo($bulan,$tahun)->result();
+
+        // $tampil_nama_menu= $this->m_hpp->tampil_nama_menu($kue);
+
+        // $hasil_produksi = $this->m_hpp->hasil_produksi($bulan,$tahun,$kue);
+
         if($checks !=""){
-          foreach($checks as $a){
-             $data = array(
-                "id_karyawan" => $this->input->post("idKaryawan".$a),
-            );
-             //$this->m_kasbon->tambah_kasbon($data,"kasbon");
-         }
-     }
-     $this->load->view("v_tabel_hpp.php");
-     //redirect('c_karyawan/tampil_karyawan');
- }
+                $counter = 0;
+            foreach($checks as $a){
+                $where = array(
+                    "id_karyawan" => $this->input->post("tkl".$a),
+                );
+                $tkl_id=$this->m_hpp->get_tkl($where,"karyawan")->result();
+                //print_r($tkl);
+                foreach ($tkl_id as $tkl_data) {
+                    $tkl_nama[$counter] = $tkl_data->nama_karyawan;
+                    $tkl_gaji[$counter] = $tkl_data->gaji_harian*30;
+                    $counter++;
+                }
+            }
 
- function tampil_karyawan(){
-    $data['tampil'] = $this->m_karyawan->tampil_karyawan()->result();
-    $this->load->view('v_karyawan.php',$data);
-}
+        }
+    $data = (array(            
+            'bahan_baku'=>$bahan_baku,
+            'total_bahan_baku'=>$total_bahan_baku,
 
-function edit_karyawan($idkaryawan){
-    $where = array('id_karyawan'=>$idkaryawan);
-    $data['edit_karyawan'] = $this->m_karyawan->edit_karyawan($where,'karyawan')->result();
-    $this->load->view('v_edit_karyawan.php',$data);
-}
+            'nama_tkl'=>$tkl_nama,
+            'gaji_tkl'=>$tkl_gaji,
+            
+            'bo'=>$bo,
+            'total_bo'=>$total_bo,
+            
+            // 'tampil_nama_menu'=>$tampil_nama_menu,
+            // 'hasil_produksi'=>$hasil_produksi
+        ));
+       // print_r($data);
 
-function update_karyawan(){
-    $u_id = $this->input->post('idKaryawan');
-    $u_nama = $this->input->post('namaKaryawan');
-    $u_alamat = $this->input->post('alamatKaryawan');
-    $u_telp = $this->input->post('noKaryawan');
-    $u_gaji = $this->input->post('gajiKaryawan');
-    $u_tgl = $this->input->post('tanggal');
-    $u_tanggal = date('Y-m-d', strtotime($u_tgl));
-    $u_peran = $this->input->post('peranKaryawan');
-
-    $data = array(
-        'nama_karyawan' => $u_nama,
-        'alamat_karyawan' => $u_alamat,
-        'no_telp_karyawan' => $u_telp,
-        'gaji_harian' => $u_gaji,
-        'tanggal_kerja' => $u_tanggal,
-        'peran' => $u_peran,
-        'status' => 1
-    );
-    $where = array('id_karyawan' => $u_id);
-
-    $this->m_karyawan->update_karyawan($where,$data,'karyawan');
-    redirect('c_karyawan/tampil_karyawan');
-}
-
-function hapus_pelanggan($id){
-    $data = array(
-        'status'=>0
-    );
-    $where= array('id_pelanggan'=>$id);
-    $this->m_pelanggan->ubah_status_pelanggan($where,$data,'pelanggan');
-    redirect('c_pelanggan/tampil_pelanggan');
+$this->load->view("v_tabel_hpp.php",$data);
+        //redirect('c_karyawan/tampil_karyawan');
 }
 }
 ?>
