@@ -41,23 +41,24 @@ class c_pesanan extends CI_Controller {
 
 		$id = $this->m_pesanan->tambah_pesanan($data,'pesanan');
 
-        //$id['data'] = $this->m_transaksi_pembelian->getid()->result();
-        // $getkode = $this->m_pesanan->getkode()->result();
-        // foreach ($getkode as $kode) {
-        // 	$get_kode = $kode->kode_pesanan;
-        // }
+
 
 		if($checks !=""){
 			foreach ($checks as $a) {
+				if($this->input->post("satuan".$a)=="Lusin"){
+					$b = $this->input->post("jumlah".$a)*12;
+				}
+				else{
+					$b = $this->input->post("jumlah".$a);
+				}
 				$data1 = array(
 					"kode_pesanan"=>$kode,
 					"id_kue" => $this->input->post("kue".$a),
-					"jumlah" => $this->input->post("jumlah".$a),
-					"satuan" => $this->input->post("satuan".$a),
+					"jumlah" => $b,
+					"satuan" => "Toples",
 				);
 
 				$this->m_pesanan->tambah_pesanan($data1,'detail_pesanan');
-			//$this->m_transaksi_pembelian->update_stok($where,$data,'stok_bahan');
 			}
 		}
 		redirect('c_pesanan/tampil_pesanan');
@@ -98,10 +99,16 @@ class c_pesanan extends CI_Controller {
 
 		if($checks !=""){
 			foreach($checks as $a){
+				if($this->input->post("satuan".$a)=="Lusin"){
+					$b = $this->input->post("jumlah".$a)*12;
+				}
+				else{
+					$b = $this->input->post("jumlah".$a);
+				}
 				$data1 = array(
 					"id_kue" => $this->input->post("kue".$a),
-					"jumlah" => $this->input->post("jumlah".$a),
-					"satuan" => $this->input->post("satuan".$a),
+					"jumlah" => $b,
+					"status" => $this->input->post("hapus".$a),
 				);
 
 				$where = array('id_detail_pesanan'=> $a);
@@ -117,6 +124,6 @@ class c_pesanan extends CI_Controller {
 		$where= array('kode_pesanan'=>$id);
 		$this->m_pesanan->ubah_status_pesanan($where,$data,'pesanan');
 		redirect('c_pesanan/tampil_pesanan');
-	}	
+	}
 }
 ?>

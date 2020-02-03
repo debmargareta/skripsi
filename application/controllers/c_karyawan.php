@@ -20,18 +20,27 @@ class c_karyawan extends CI_Controller {
         $tgl = $this->input->post('tanggal');
         $tanggal = date('Y-m-d', strtotime($tgl));
         $peran = $this->input->post('peranKaryawan');
-        
-        $data = array(
-            'nama_karyawan' => $nama,
-            'alamat_karyawan' => $alamat,
-            'no_telp_karyawan' => $telp,
-            'gaji_harian' => $gaji,
-            'tanggal_kerja' => $tanggal,
-            'peran' => $peran,
-            'status' => 1
+        $where = array(
+            'nama_karyawan' => $u_nama,
+            'no_telp_karyawan' => $u_telp,
         );
-        
-        $this->m_karyawan->tambah_karyawan($data,'karyawan');
+        $ceknama = $this->m_karyawan->edit_karyawan($where,"karyawan")->num_rows();
+        if($ceknama>0){
+             echo "<script>alert('Nama karyawan atau No telepon sudah ada')</script>";
+        }
+        else{
+            $data = array(
+                'nama_karyawan' => $nama,
+                'alamat_karyawan' => $alamat,
+                'no_telp_karyawan' => $telp,
+                'gaji_harian' => $gaji,
+                'tanggal_kerja' => $tanggal,
+                'peran' => $peran,
+                'status' => 1
+            );
+            
+            $this->m_karyawan->tambah_karyawan($data,'karyawan');
+    }
         redirect('c_karyawan/tampil_karyawan');
     }
     
@@ -55,29 +64,39 @@ class c_karyawan extends CI_Controller {
         $u_tgl = $this->input->post('tanggal');
         $u_tanggal = date('Y-m-d', strtotime($u_tgl));
         $u_peran = $this->input->post('peranKaryawan');
-        
-        $data = array(
+
+        $where = array(
             'nama_karyawan' => $u_nama,
-            'alamat_karyawan' => $u_alamat,
             'no_telp_karyawan' => $u_telp,
-            'gaji_harian' => $u_gaji,
-            'tanggal_kerja' => $u_tanggal,
-            'peran' => $u_peran,
-            'status' => 1
         );
-        $where = array('id_karyawan' => $u_id);
-        
-        $this->m_karyawan->update_karyawan($where,$data,'karyawan');
+        $ceknama = $this->m_karyawan->edit_karyawan($where,"karyawan")->num_rows();
+        if($ceknama>0){
+             echo "<script>alert('Nama karyawan atau No telepon sudah ada')</script>";
+        }
+        else{
+            $data = array(
+                'nama_karyawan' => $u_nama,
+                'alamat_karyawan' => $u_alamat,
+                'no_telp_karyawan' => $u_telp,
+                'gaji_harian' => $u_gaji,
+                'tanggal_kerja' => $u_tanggal,
+                'peran' => $u_peran,
+                'status' => 1
+            );
+            $where = array('id_karyawan' => $u_id);
+            
+            $this->m_karyawan->update_karyawan($where,$data,'karyawan');
+        }
         redirect('c_karyawan/tampil_karyawan');
     }
     
-    function hapus_pelanggan($id){
+    function hapus_karyawan($id){
         $data = array(
             'status'=>0
         );
-        $where= array('id_pelanggan'=>$id);
-        $this->m_pelanggan->ubah_status_pelanggan($where,$data,'pelanggan');
-        redirect('c_pelanggan/tampil_pelanggan');
+        $where= array('id_karyawan'=>$id);
+        $this->m_karyawan->ubah_status_karyawan($where,$data,'karyawan');
+        redirect('c_karyawan/tampil_karyawan');
     }
 }
 ?>

@@ -8,6 +8,7 @@ class c_resep extends CI_Controller {
 
   public function tampil_resep(){
     $data['resep'] = $this->m_resep->tampil_resep()->result();
+    $data['resepnama'] = $this->m_resep->distincnama()->result();
     $this->load->view('v_resep', $data);
   }
 
@@ -64,9 +65,9 @@ class c_resep extends CI_Controller {
         "id_bahan" => $this->input->post("idBahan".$i),
         "takaran" => $this->input->post("takaran".$i),
         "id_satuan" => $this->input->post("satuanBahan".$i),
-        "status" => 1,
+        "status" => $this->input->post("hapus".$i),
       );
-       print_r($data);
+       //print_r($data);
        $where = array("id_resep"=> $i);
        $this->m_resep->update_resep($where,$data,'resep');
      }
@@ -81,11 +82,11 @@ class c_resep extends CI_Controller {
         $where= array('id_kue'=>$id);
         $this->m_resep->ubah_status_resep($where,$data,'resep');
 
-         $data = array(
+         $data2 = array(
             'status_resep'=>0
         );
-        $where= array('id_kue'=>$id);
-        $this->m_resep->ubah_status_resep($where,$data,'kue');
+        $where2= array('id_kue'=>$id);
+        $this->m_resep->ubah_status_resep($where2,$data2,'kue');
 
         redirect('c_resep/tampil_resep');
     }

@@ -16,15 +16,27 @@ class c_pelanggan extends CI_Controller {
         $nama = $this->input->post('namaPelanggan');
         $alamat = $this->input->post('alamatPelanggan');
         $telp = $this->input->post('noPelanggan');
-        
-        $data = array(
-            'nama_pelanggan' => $nama,
-            'alamat_pelanggan' => $alamat,
-            'no_telp_pelanggan' => $telp,
-            'status' => 1,
+        $where = array(
+            'nama_pelanggan' => $u_nama,
+            'no_telp_pelanggan' => $u_telp,
         );
+
+        $ceknama = $this->m_pelanggan->edit_pelanggan($where,"edit_pelanggannggan")->num_rows();
+        echo $ceknama;
+        if($ceknama>0){
+             echo "<script>alert('Nama atau No telepon sudah ada')</script>";
+        }
+        else{
         
-        $this->m_pelanggan->tambah_pelanggan($data,'pelanggan');
+            $data = array(
+                'nama_pelanggan' => $nama,
+                'alamat_pelanggan' => $alamat,
+                'no_telp_pelanggan' => $telp,
+                'status' => 1,
+            );
+            
+            $this->m_pelanggan->tambah_pelanggan($data,'pelanggan');
+        }
         redirect('c_pelanggan/tampil_pelanggan');
     }
     
@@ -44,17 +56,27 @@ class c_pelanggan extends CI_Controller {
         $u_nama = $this->input->post('namaPelanggan');
         $u_alamat = $this->input->post('alamatPelanggan');
         $u_no_telp = $this->input->post('noPelanggan');
-        
-        $data = array(
-            'id_pelanggan' =>$u_id,
-            'nama_pelanggan' =>$u_nama,
-            'alamat_pelanggan' =>$u_alamat,
-            'no_telp_pelanggan' =>$u_no_telp,
-            'status' =>1,
+
+        $where = array(
+            'nama_pelanggan' => $u_nama,
+            'no_telp_pelanggan' => $u_no_telp,
         );
-        $where = array('id_pelanggan' => $u_id);
-        
-        $this->m_pelanggan->update_pelanggan($where,$data,'pelanggan');
+        $ceknama = $this->m_pelanggan->edit_pelanggan($where,"pelanggan")->num_rows();
+        if($ceknama>0){
+             echo "<script>alert('Nama atau No telepon sudah ada')</script>";
+        }
+        else{
+            $data = array(
+                'id_pelanggan' =>$u_id,
+                'nama_pelanggan' =>$u_nama,
+                'alamat_pelanggan' =>$u_alamat,
+                'no_telp_pelanggan' =>$u_no_telp,
+                'status' =>1,
+            );
+            $where = array('id_pelanggan' => $u_id);
+            
+            $this->m_pelanggan->update_pelanggan($where,$data,'pelanggan');
+        }
         redirect('c_pelanggan/tampil_pelanggan');
     }
     

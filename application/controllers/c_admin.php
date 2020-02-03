@@ -124,6 +124,14 @@ class c_admin extends CI_Controller {
         $this->m_admin->update_hapus($where,$data,'admin');
         redirect('c_admin/tampil_admin');
     }
+    function update_deactive($id_admin){
+        $data = array(
+            'status'=> 1
+        );
+        $where = array('id_admin'=>$id_admin);
+        $this->m_admin->update_hapus($where,$data,'admin');
+        redirect('c_admin/tampil_admin');
+    }
     function keluar(){
         $this->session->sess_destroy();
         redirect('Welcome/index');

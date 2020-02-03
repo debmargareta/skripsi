@@ -23,65 +23,95 @@ class c_retur_penjualan extends CI_Controller {
         $checks = $this->input->post("counter");
         $checks0 = $this->input->post("counter0");
 
-        $data = array(
-            'kode_retur' => $kode,
-            'kode_penjualan' => $kode_penj,
-            'tanggal'=>$tgl,
-            'status' => 1,
-        );
-        $this->m_retur_penjualan->tambah_retur($data,'retur_penjualan');
+        
 
         if($checks !=""){
+            $u_ttl_harga=0;
             foreach($checks as $a){
-                $data1 = array(
-                    'kode_retur'=>$kode,
-                    'id_kue'=>$this->input->post('id_kue'.$a),
-                    'jumlah_retur'=>$this->input->post('jumlah_retur'.$a),
-                    'satuan'=>$this->input->post('satuan'.$a),
-                    'status'=>1,
-                );
-                $this->m_retur_penjualan->tambah_retur($data1,'detail_retur_penjualan');
-                $where = $this->input->post('id_kue'.$a);
-                $stok_kue = $this->m_retur_penjualan->getstokkue($where)->row();
-                $stok = $stok_kue->stok;
+                $jumlah_pesan = $this->input->post('jml_pesan'.$a);
+                $c = $this->input->post('jumlah_retur'.$a);
 
-                if($this->input->post('satuan'.$a)=='Lusin'){
-                    $toples = $this->input->post('jumlah_retur'.$a)*12;
-                    $update_stok_kue = $stok + $toples;
 
+                //cek satuan yang diinput
+                if($this->input->post('satuan'.$a)=="pilih"){
+                    echo '<script type="text/javascript">
+                            alert("Pilih satuan retur kue");
+                        </script>';
                 }
                 else{
-                    $update_stok_kue = $stok+ $this->input->post('jumlah_retur'.$a);
-                }
-                $data2 = array(
-                    "stok" => $update_stok_kue
-                );
-                $where1 = array('id_kue' => $this->input->post('id_kue'.$a));
-                $this->m_retur_penjualan->update_retur($where1,$data2,'kue');
+                    //cek retur biar gk lebh gede dr yg dipesen
+                    if($jumlah_pesan>$c){
+                        
+                        //kaliin jumlah retur ke toples
+                        if($this->input->post('satuan'.$a)=="Lusin"){
+                            $b = $c*12;
+                        }
+                        else{
+                            $b=$c;
+                        }
 
+                         $data1 = array(
+                            'kode_retur'=>$kode,
+                            'id_kue'=>$this->input->post('id_kue'.$a),
+                            'jumlah_retur'=>$b,
+                            'satuan'=>"Toples",
+                            'harga'=>$this->input->post('hargakue'.$a),
+                            'status'=>1,
+                        );
+                        $this->m_retur_penjualan->tambah_retur($data1,'detail_retur_penjualan');
 
+                        //update stok kue(nambah stok ue)
+                        $where = $this->input->post('id_kue'.$a);
+                        $stok_kue = $this->m_retur_penjualan->getstokkue($where)->row();
+                        $stok = $stok_kue->stok;
+                        $update_stok_kue = $stok + $b;
+                        $data2 = array(
+                            "stok" => $update_stok_kue
+                        );
+                        $where1 = array('id_kue' => $this->input->post('id_kue'.$a));
+                        $this->m_retur_penjualan->update_retur($where1,$data2,'kue');
 
-                $where2 = $this->input->post('kode_pesanan'.$a);
-                $pesanan = $this->m_retur_penjualan->getpesanan($where2)->result();
-                foreach ($pesanan as $get_pesanan) {
-                    $get_jumlah = $get_pesanan->jumlah;
-                    $get_satuan = $get_pesanan->satuan;
-                }
-                
-                if($this->input->post('satuan'.$a)=='Lusin'){
-                    $toples1 = $this->input->post('jumlah_retur'.$a)*12;
-                    $update_pesanan = $get_jumlah-$toples1;
-                }
-                else{
-                    $update_pesanan = $get_jumlah - $this->input->post('jumlah_retur'.$a); 
-                }
+                        //update jumlah pesanan(dikurang retur)
+                        $sisa_pesanan = (int)$jumlah_pesan - (int)$c;
+                        echo $sisa_pesanan;
+                        $data3 = array(
+                            'jumlah'=>$sisa_pesanan,
+                        );
+                        $where2 = array(
+                            'kode_pesanan'=> $this->input->post('kode_pesanan'.$a),
+                            'id_kue' => $this->input->post('id_kue'.$a),
+                        );
+                        $this->m_retur_penjualan->update_retur($where2,$data3,'detail_pesanan');
 
-                $data3 = array(
-                    "jumlah" => $update_pesanan
-                );
-                $where3 = array('kode_pesanan' => $this->input->post('kode_pesanan'.$a));
-                $this->m_retur_penjualan->update_retur($where3,$data3,'detail_pesanan');
+                        //update total harga di transaksi penjualan
+                        $u_ttl_harga += $sisa_pesanan*(int)$this->input->post('hargakue'.$a);
+                        
+                        
+                    }
+                    else{
+                        echo '<script type="text/javascript">
+                            alert("Jumlah retur lebih besar dari pesanan");
+                        </script>';
+                        
+                    }
+                } 
             }
+            $data4 = array(
+                'total_harga'=>$u_ttl_harga,
+            );
+            $where3 = array(
+                'kode_penjualan'=> $kode_penj,
+            );
+            $this->m_retur_penjualan->update_retur($where3,$data4,'transaksi_penjualan');
+
+            $data = array(
+                'kode_retur' => $kode,
+                'kode_penjualan' => $kode_penj,
+                'tanggal'=>$tgl,
+                'status' => 1,
+            );
+            $this->m_retur_penjualan->tambah_retur($data,'retur_penjualan');
+
         }
         redirect('c_retur_penjualan/tampil_retur');
     }
@@ -91,10 +121,10 @@ class c_retur_penjualan extends CI_Controller {
         $this->load->view('v_retur.php',$data);
     }
 
-    function edit_supplier($idsupplier){
-        $where = array('id_supplier'=>$idsupplier);
-        $data['edit_supplier'] = $this->m_supplier->edit_supplier($where,'supplier')->result();
-        $this->load->view('v_edit_supplier.php',$data);
+    function edit_retur($id){
+        $where = array('kode_retur'=>$id);
+        $data['edit_retur'] = $this->m_retur->edit_retur($where,'supplier')->result();
+        $this->load->view('v_edit_retur.php',$data);
     }
 
     function update_supplier(){

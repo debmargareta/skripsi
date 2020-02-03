@@ -14,104 +14,125 @@ class c_piutang extends CI_Controller {
     }
     
     function tambah_piutang(){
-        $id = $this->input->post('id_transaksi_penjualan');
-        $total = $this->input->post('totalCicilan');
+        $idpiutang = $this->input->post('idPiutang');
+        $idpenj = $this->input->post('id_transaksi_penjualan');
+        $total = $this->input->post('totalCicil');
         $nominal = $this->input->post('nominal');
+        $ttl = $this->input->post('total_harga');
+        $kodepesanan = $this->input->post('kodepesanan');
         $tgl = date('Y-m-d');
-        
-        $data = array(
-            'kode_penjualan' => $id,
-            'jenis_cicilan' => $nominal,
-            'status' => 1,
-        );
 
-        $idpiutang = $this->m_piutang->tambah_piutang($data,'piutang');
-
-        $data1 = array(
-            'id_piutang'=>$idpiutang,
-            'nominal_cicilan'=>$nominal,
-            'tanggal_pembayaran'=> date('Y-m-d'),
-        );
-        $this->m_piutang->tambah_piutang($data1,'detail_piutang');
-        // $data1 = $this->m_pembayaran_hutang->tampil_pembayaran()->result();
-        
-        // foreach ($data1 as $getid) {
-        //     $id_transaksi = $getid->id_transaksi_pembelian;
-        //     $bayar = $getid->nominal_bayar;
-        // }
-
-        $get_piutang = $this->m_piutang->getpiutang()->result();
-
-        foreach ($get_piutang as $getnominal) {
-            $total = $getnominal->total_harga;
+        if($idpenj=="Pilih"){
+            echo '<script type="text/javascript">alert("Pilih Kode Transaksi");</script>';
+            $data['piutang']= $this->m_piutang->piutang()->result();
+            $this->load->view('v_tambah_piutang.php',$data); 
         }
-        echo $total;
+        
+        else{
+            if($total>0){
 
-        //if($nominal < $total){
+                if($nominal>$ttl){
+                    echo '<script type="text/javascript">alert("Masukkan nominal dengan benar");</script>';
+                        $data['piutang']= $this->m_piutang->piutang()->result();
+                        $this->load->view('v_tambah_piutang.php',$data); 
+                }
+                else{
+                    $sisahutang = $ttl-$nominal;
+                    $sisacicilan = $total-1;
 
-        $hasil = $total - $nominal;
+                    $data = array(
+                        'id_piutang'=>$idpiutang,
+                        'nominal_cicilan'=>$nominal,
+                        'tanggal_pembayaran'=> date('Y-m-d'),
+                        'status'=> 1,
+                    );
+                    $this->m_piutang->tambah_piutang($data,'detail_piutang');
 
-        $data2 = array(
-            "total_harga"=>$hasil,
-        );
+                    $data2 = array(
+                        "total_hutang"=>$sisahutang,
+                        "jenis_cicilan"=>$sisacicilan,
+                    );
 
-        $where = array('kode_penjualan'=> $idpiutang);
-        $this->m_piutang->update_piutang($where, $data2,'transaksi_penjualan');
-        //$this->m_pembayaran_hutang->tambah_pembayaran($data,'pembayaran_hutang');
-        redirect('c_piutang/tampil_pembayaran');
-       // }
-       //  else{
-       //      echo "<script>alert('test')</script>";
-       //      redirect('c_pembayaran_hutang/lihat_tambah_pembayaran');
-       //      $this->load->view('v_tambah_pembayaran_hutang.php');
-       //  }
+                    $where = array('id_piutang'=> $idpiutang);
+                    $this->m_piutang->update_piutang($where, $data2,'piutang');
+                    redirect('c_piutang/tampil_pembayaran');
+                }
+            }
+        else{
+            echo '<script type="text/javascript">
+                        alert("TEST");
+                    </script>';
+            $data['piutang']= $this->m_piutang->piutang()->result();
+            $this->load->view('v_tambah_piutang.php',$data); 
+        }
+        }
         
     }
     function tampil_pembayaran(){
         $data['tampil'] = $this->m_piutang->tampil_pembayaran()->result();
+        $data['detail'] = $this->m_piutang->getdetail_piutang()->result();
         $this->load->view('v_piutang.php',$data);
     }
 
-    function edit_supplier($idsupplier){
-        $where = array('id_supplier'=>$idsupplier);
-        $data['edit_supplier'] = $this->m_supplier->edit_supplier($where,'supplier')->result();
-        $this->load->view('v_edit_supplier.php',$data);
+    function edit_piutang($id){
+        $where = array('id_detail_piutang'=>$id);
+        $data['edit_piutang'] = $this->m_piutang->edit_piutang($where,'detail_piutang')->result();
+        $this->load->view('v_edit_piutang.php',$data);
     }
 
-    function update_supplier(){
-        $u_id_supplier = $this->input->post('idSupplier');
-        $u_nama_supplier = $this->input->post('namaSupplier');
-        $u_nama_toko = $this->input->post('namaToko');
-        $u_alamat_supplier = $this->input->post('alamatToko');
-        $u_no_telp_supplier = $this->input->post('noToko');
+    function update_piutang(){
+        $u_id = $this->input->post('id');
+        $u_nominal = $this->input->post('nominal');
+        $u_tgl = $this->input->post('tgl');
+        $u_tanggal = date('Y-m-d', strtotime($u_tgl));
 
         $data = array(
-            'id_supplier' =>$u_id_supplier,
-            'nama_supplier' =>$u_nama_supplier,
-            'nama_toko' =>$u_nama_toko,
-            'alamat_supplier' =>$u_alamat_supplier,
-            'no_telp_supplier' =>$u_no_telp_supplier,
+            'id_detail_piutang' =>$u_id,
+            'nominal_cicilan' =>$u_nominal,
+            'tanggal_pembayaran' =>$u_tanggal,
             'status' =>1,
         );
-        $where = array('id_supplier' => $u_id_supplier);
+        $where = array('id_detail_piutang' => $u_id);
 
-        $this->m_supplier->update_supplier($where,$data,'supplier');
-        redirect('c_supplier/tampil_supplier');
+        $this->m_piutang->update_piutang($where,$data,'detail_piutang');
+        redirect('c_piutang/tampil_pembayaran');
     }
 
-    function hapus_supplier($id){
+    function hapus_piutang($id){
+        $data1 = $this->m_piutang->get_nominal_cicilan($id)->result();
+        foreach ($data1 as $get_detail_piutang) {
+            $get_nominal_cicilan = $get_detail_piutang->nominal_cicilan;
+            $id_piutang = $get_detail_piutang->id_piutang;
+        }
+        
+        $where2 = $id_piutang;
+        $data2 = $this->m_piutang->get_total_hutang($where2)->row();
+        $nominal_cicilan = $data2->total_hutang;
+
+        $sisahutang=$get_nominal_cicilan+$nominal_cicilan;
+
+        $data3 = array(
+            'total_hutang' =>$sisahutang,
+        );
+        $where = array('id_piutang' => $id_piutang);
+
+        $this->m_piutang->update_piutang($where,$data3,'piutang');
+
         $data = array(
             'status'=>0
         );
-        $where= array('id_supplier'=>$id);
-        $this->m_supplier->ubah_status_supplier($where,$data,'supplier');
-        redirect('c_supplier/tampil_supplier');
+        $where= array('id_detail_piutang'=>$id);
+        $this->m_piutang->ubah_status_piutang($where,$data,'detail_piutang');
+        redirect('c_piutang/tampil_pembayaran');
     }
     function get_id_transaksi(){
      $id = $this->input->post('kode_penjualan');
-     $data = $this->m_piutang->get_id_transaksi($id)->result();
-   // $data2 = $this->m_pembayaran_hutang->totalharga($id)->result();
-   // $hasil = array_merge($data, $data2);
+     $data1 = $this->m_piutang->get_id_transaksi($id)->result();
+     $data2 = $this->m_piutang->getCicilan($id)->result();
+     $data = array(
+            'transaksi'=>$data1,
+            'cicilan'=>$data2
+         );
      echo json_encode($data);
  }
 }

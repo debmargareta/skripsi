@@ -62,5 +62,27 @@ function get_id_transaksi(){
    // $hasil = array_merge($data, $data2);
    echo json_encode($data);
 }
+
+function edit_pembayaran($id){
+        $where = array('id_pembayaran_hutang'=>$id);
+        $where2 = $id;
+        $data['edit1'] = $this->m_pembayaran_hutang->edit_hutang($where,'pembayaran_hutang')->result();
+        $this->load->view('v_edit_hutang.php',$data);
+    }
+    function update_pembayaran(){
+        $id = $this->input->post('id');
+        $kode = $this->input->post('kodePembelian');
+        //echo $kode;
+        $nominal = $this->input->post('nominal');
+
+        $data = array(
+            'nominal_bayar' => $nominal,
+        );
+        $where = array('id_pembayaran_hutang'=> $id);
+        $this->m_pembayaran_hutang->update_pembayaran($where,$data,'pembayaran_hutang');
+        
+        redirect('c_pembayaran_hutang/tampil_pembayaran');
+    }
+    
 }
 ?>

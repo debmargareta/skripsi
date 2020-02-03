@@ -27,16 +27,22 @@ class m_produksi extends CI_Model{
     }
     function get_kue($where){
         // before: return $this->db->query("SELECT * from kue where id_bahan = '.$where.'");
-        return $this->db->query("SELECT DISTINCT stok from kue where id_kue = '".$where."'");
+        return $this->db->query("SELECT stok from kue where id_kue = '".$where."'");
     }
-   
-    function update_bahan($where,$data,$table){
+     function edit_produksi($where,$table){
+        return $this->db->get_where($table,$where);
+    }
+    function update_produksi($where,$data,$table){
         $this->db->where($where);
         $this->db->update($table,$data);
     }
     function ubah_status_bahan($where,$data,$table){
         $this->db->where($where);
         $this->db->update($table,$data);
+    }
+    function check_stock_availability($bahan,$takaran){
+        return $this->db->query("select * from bahan where id_bahan = ".$bahan." and stok > ".$takaran);
+
     }
 }
 

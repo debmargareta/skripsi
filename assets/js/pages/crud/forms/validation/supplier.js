@@ -7,7 +7,7 @@ var KTFormControls = function () {
         $( "#kt_form_1" ).validate({
             // define validation rules
             rules: {
-                namaSupplier: {
+               namaSupplier: {
                     required: true
                 },
                 namaToko: {
@@ -17,7 +17,10 @@ var KTFormControls = function () {
                     required: true
                 },
                 noToko: {
-                    required: true
+                    required: true,
+                    number: true,
+                    minlength: 12,
+                    maxlength: 13
                 }
             },
 
@@ -38,7 +41,7 @@ var KTFormControls = function () {
             },
 
             submitHandler: function (form) {
-                //form[0].submit(); // submit the form
+                form[0].submit(); // submit the form
             }
         });
     }
@@ -59,7 +62,10 @@ var KTFormControls = function () {
                     required: true
                 },
                 noToko: {
-                    required: true
+                    required: true,
+                    number: true,
+                    minlength: 12,
+                    maxlength: 13
                 }
             },
 
@@ -79,14 +85,14 @@ var KTFormControls = function () {
             },
 
             submitHandler: function (form) {
+                //form[0].submit(); // submit the form
                 swal.fire({
                     "title": "",
                     "text": "Form validation passed. All good!",
                     "type": "success",
                     "confirmButtonClass": "btn btn-secondary"
                 });
-                form[0].submit(); // submit the form
-
+                form[0].submit();
                 return false;
             }
         });

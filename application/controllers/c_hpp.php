@@ -19,21 +19,27 @@ class c_hpp extends CI_Controller {
         $kue = $this->input->post("kue");
         $tahun = $this->input->post("tahun");
         $bulan = $this->input->post("bulan");
+        $tanggal = date('Y-m-d');
         $checks = $this->input->post("counter");
-        $checks1 = $this->input->post("counter1");
+
+        $takaran_beli=$this->m_hpp->total_beli_bahan($kue,$bulan,$tahun)->row();
+        $total_takaran_beli_bahan = $takaran_beli->total;
+        //echo $total_takaran_beli_bahan."<br>";
 
         $bahan_baku = $this->m_hpp->bahan_baku($kue,$bulan,$tahun)->result();
         $total_bahan_baku = $this->m_hpp->total_bahan_baku($kue,$bulan,$tahun)->result();
 
-        // $tkl=$this->m_hpp->tkl($bulan,$tahun);
-        // $total_tkl=$this->m_hpp->total_tkl($bulan,$tahun);
 
         $bo=$this->m_hpp->bo($bulan,$tahun)->result();
         $total_bo=$this->m_hpp->total_bo($bulan,$tahun)->result();
 
-        // $tampil_nama_menu= $this->m_hpp->tampil_nama_menu($kue);
+        $tampil_nama_kue= $this->m_hpp->get_namakue($kue)->result();
 
-        // $hasil_produksi = $this->m_hpp->hasil_produksi($bulan,$tahun,$kue);
+        $takaran = $this->m_hpp->total_takaran($kue)->row();
+        $total = $takaran->totaltakaran;
+
+        $toples = $total_takaran_beli_bahan/$total;
+
 
         if($checks !=""){
                 $counter = 0;
@@ -61,13 +67,37 @@ class c_hpp extends CI_Controller {
             'bo'=>$bo,
             'total_bo'=>$total_bo,
             
-            // 'tampil_nama_menu'=>$tampil_nama_menu,
-            // 'hasil_produksi'=>$hasil_produksi
+            'tampil_nama_kue'=>$tampil_nama_kue,
+            'total_produksi'=>$toples,
         ));
-       // print_r($data);
 
-$this->load->view("v_tabel_hpp.php",$data);
-        //redirect('c_karyawan/tampil_karyawan');
+    $tbb = $this->m_hpp->total_bahan_baku($kue,$bulan,$tahun)->row();
+    $totalbahanbaku = $tbb->total1;
+    //echo $totalbahanbaku."<br>";
+
+    $tbo = $this->m_hpp->total_bo($bulan,$tahun)->row();
+    $totaloverhead = $tbo->total2;
+    //echo $totaloverhead."<br>";
+
+    $gaji = array_sum($tkl_gaji);
+    $totalgaji = (integer)$gaji;
+    //echo $totalgaji."<br>";
+    //echo $totalgaji;
+
+    $hpp= ($totalbahanbaku+$totaloverhead+$totalgaji)/$toples;
+    //echo $hpp;
+
+    $data2 = array(
+        "id_kue" => $kue,
+        "biaya_bahan_baku" => $totalbahanbaku,
+        "biaya_tenaga_kerja" => $totalgaji ,
+        "biaya_overhead" => $totaloverhead,
+        "tanggal" => $tanggal,
+        "harga_pokok_produksi"=> $hpp,
+    );
+
+   $this->m_hpp->tambah_hpp($data2,"harga_pokok_produksi");
+   $this->load->view("v_tabel_hpp.php",$data);
 }
 }
 ?>

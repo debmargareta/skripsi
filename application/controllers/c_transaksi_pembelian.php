@@ -140,7 +140,7 @@ class c_transaksi_pembelian extends CI_Controller {
 					"jumlah" => $this->input->post("jumlah".$a),
 					"id_satuan" => $this->input->post("satuan".$a),
 					"harga" => $this->input->post("harga".$a),
-					"status" => 1
+					"status" => $this->input->post("hapus".$a),
 				);
 
 				$where = array('id_detail_transaksi_pembelian'=> $a);
@@ -158,6 +158,7 @@ class c_transaksi_pembelian extends CI_Controller {
 				
 				$where = array('kode_pembelian'=> $kode);
 				$this->m_transaksi_pembelian->update_transaksi($where, $data2,'transaksi_pembelian');
+				
 
 				
 			}

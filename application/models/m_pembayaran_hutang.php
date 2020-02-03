@@ -14,7 +14,7 @@ class m_pembayaran_hutang extends CI_Model{
     function gethutang(){
         return $this->db->query("SELECT * FROM transaksi_pembelian");
     }
-    function edit_pelanggan($where,$table){
+    function edit_hutang($where,$table){
         return $this->db->get_where($table,$where);
     }
     function update_pembayaran($where,$data,$table){
@@ -30,6 +30,12 @@ class m_pembayaran_hutang extends CI_Model{
     }
     function totalharga($id){
         return $this->db->query("SELECT SUM(harga) as totalharga FROM detail_transaksi_pembelian where id_transaksi_pembelian = '$id'");
+    }
+    function bahan(){
+        return $this->db->query("SELECT * FROM bahan WHERE status ='1'");
+    }
+    function satuan(){
+        return $this->db->query("SELECT * FROM satuan WHERE status ='1'");
     }
 }
 
